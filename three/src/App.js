@@ -1,16 +1,8 @@
-import { Canvas, useFrame } from "@react-three/fiber";
 import React from "react";
+import ReactGlobe from "react-globe.gl";
 
 function App() {
-  return (
-    <Canvas>
-      <pointLight position={[10, 10, 10]} />
-      <mesh>
-        <sphereBufferGeometry />
-        <meshStandardMaterial color="hotpink" />
-      </mesh>
-    </Canvas>
-  );
+  return <ReactGlobe height="100vh" width="100vw" />;
 }
 
 export default App;
