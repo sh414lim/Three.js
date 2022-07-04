@@ -1,45 +1,91 @@
-import React, { Suspense, useEffect, useRef, useState } from "react";
-import ReactGlobe from "react-globe.gl";
+import React, { Suspense, useEffect, useMemo, useRef } from "react";
+// import ReactGlobe from "react-globe.gl";
 import * as THREE from 'three';
-import { Plane, Scene } from "three";
+// import { Plane, Scene, TubeGeometry } from "three";
 import {Canvas, useFrame} from '@react-three/fiber';
-import {OrbitControls,Stars} from '@react-three/drei';
 import styled from "styled-components"
+import Earth from "./Earth";
+import {Text ,Stars } from "@react-three/drei";
+import Graph from "./Graph";
 
-const CanvasContaier = styled.div`
-width:100%;
-height:100%;
+const Container = styled.div`
+width:"100%";
+height:1200px;
+background-color::"red";
+`
+
+const Ea = styled.h1`
+color: "red";
+font-size:"100px";
 `
 
 
-const Earth = (props) =>{
- return(
-   <>
-   <ambientLight intensity={0.6}/>
-   <mesh>
-     <sphereGeometry args={[1,32,32]}/>
-     <meshPhongMaterial color="red"/>;
-   </mesh>
-   </>
- ) 
+const textProps = {
+  fontSize: 3.9,
+  font: 'http://fonts.gstatic.com/s/modak/v5/EJRYQgs1XtIEskMA-hI.woff'
+}
+
+function Title({ layers = undefined, ...props }) {
+  const group = useRef()
+  useEffect(() => {
+    group.current.lookAt(0, 0, 0)
+  }, [])
+
+  return (
+    <group {...props} ref={group}>
+      <Text depthTest={false} material-toneMapped={false} {...textProps} layers={layers}>
+        Hello
+      </Text>
+    </group>
+  )
+}
+
+function TitleCopies({ layers }) {
+  const vertices = useMemo(() => {
+    const y = new THREE.IcosahedronGeometry(12)
+    return y.vertices
+  }, [])
+
+  return (
+    <group name="titleCopies">
+      { vertices.map((vertex, i) => (
+        <Title name={'titleCopy-' + i} position={vertex} layers={layers} />
+      ))}
+    </group>
+  )
 }
 
 
 
+const Scene = () => {
+  return (
+    <group name="sceneContainer">
+      <TitleCopies />
+    </group>
+  )
+}
+
+
 function App() {
 
-//  init();
 
   return (
-    <>
-      <CanvasContaier>
-        <Canvas>
+<> 
+<Container>
+        <Canvas  >
           <Suspense fallback={null}>
-            <Earth/>
-            </Suspense>;
+              <Earth/>
+            <Stars color="orange" />
+            </Suspense>
+
+          <group name="sceneContainer">
+             <Title   />
+         </group>
+      <ambientLight intensity={0.4} />
+            
         </Canvas>
-      </CanvasContaier>
-    </>
+    </Container> 
+</>
         
   );
 }
