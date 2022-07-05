@@ -1,15 +1,23 @@
-import React, { Suspense, useEffect, useMemo, useRef } from "react";
+import React, { Suspense, useEffect, useMemo, useRef, useState } from "react";
 // import ReactGlobe from "react-globe.gl";
 import * as THREE from 'three';
 // import { Plane, Scene, TubeGeometry } from "three";
 import {Canvas, useFrame} from '@react-three/fiber';
 import styled from "styled-components"
 import Earth from "./Earth";
-import {Text ,Stars } from "@react-three/drei";
+import {Text ,Stars, Sphere, MeshWobbleMaterial } from "@react-three/drei";
 import Graph from "./Graph";
+import { GridHelper } from "three";
+import Space from "./Space";
 
 const Container = styled.div`
-width:"100%";
+width:"50%";
+height:1200px;
+background-color::"red";
+`
+
+const SubContainer = styled.div`
+width:"50%";
 height:1200px;
 background-color::"red";
 `
@@ -34,8 +42,8 @@ function Title({ layers = undefined, ...props }) {
 
   return (
     <group {...props} ref={group}>
-      <Text depthTest={false} material-toneMapped={false} {...textProps} layers={layers}>
-        Hello
+      <Text  depthTest={false} material-toneMapped={false} {...textProps} layers={layers}>
+        Hello World
       </Text>
     </group>
   )
@@ -70,22 +78,42 @@ const Scene = () => {
 function App() {
 
 
+  const [value , setValue] = useState(true);
+
+  const handleClick = () =>{
+    alert(123)
+    if(value){
+      setValue(false);
+    }else{
+      setValue(true)
+    }      
+  }
+
+
   return (
 <> 
 <Container>
-        <Canvas  >
-          <Suspense fallback={null}>
-              <Earth/>
-            <Stars color="orange" />
-            </Suspense>
+        <Canvas >
+          <Stars color="orange" />
+            <Suspense fallback={null}>
 
-          <group  name="sceneContainer">
-             {/* <Title    /> */}
-         </group>
-      <ambientLight intensity={0.4} />
-            
+                <ambientLight intensity={0.4} />
+            </Suspense>
+             <Title position={[10, 10, 10]}/>
+
+             <Space oposition={[10, 10, 10]}/>
+
+              {value ? 
+                <Earth onClikck ={(handleClick)}  position={[1.5, 10, 10]} />
+                :
+                <Earth onClikck ={handleClick}  position={[50, 10, 10]} />
+            }
+
+             
+
+
         </Canvas>
-    </Container> 
+  </Container> 
 </>
         
   );
