@@ -22,6 +22,7 @@ font-size:"100px";
 
 const textProps = {
   fontSize: 3.9,
+  display:"flex",
   font: 'http://fonts.gstatic.com/s/modak/v5/EJRYQgs1XtIEskMA-hI.woff'
 }
 
@@ -78,8 +79,8 @@ function App() {
             <Stars color="orange" />
             </Suspense>
 
-          <group name="sceneContainer">
-             <Title   />
+          <group  name="sceneContainer">
+             {/* <Title    /> */}
          </group>
       <ambientLight intensity={0.4} />
             
